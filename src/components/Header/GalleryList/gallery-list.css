@@ -1,0 +1,67 @@
+ul{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    row-gap: .8em;
+    height: 100%;
+    justify-content: space-between;
+}
+
+
+ul li:first-child li{
+    list-style: none;
+    padding-left: 1em;
+}
+
+header .create-gallery{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding-left: 1em;
+}
+
+header .logout-header{
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    padding-left: 1em;
+}
+
+header ul .loading-galleries{
+    min-height: 350px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+header ul .gallery-list{
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+}
+
+header ul .gallery-list a div{
+    padding: .5em 0;
+    padding-left: 15px;
+}
+
+ul li{
+    padding: .5em 0;
+    text-align: left;
+    font-size: 1.1em;
+    
+}
+
+ul li.active{
+    background-color: tomato;
+}
+
+.gallery-list  a{
+    color :White;
+    text-decoration: none;
+}
