@@ -1,0 +1,25 @@
+.modal-header{
+    display: flex;
+    height: 64px;
+    background-color: rgb(46, 45, 45,0.7);
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 3em;
+    z-index: 1000;
+}
+
+.modal-header .options{
+    display: flex;
+    column-gap: 1em;
+}
+
+.modal-header .options svg{
+    padding: .4em;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.modal-header .options svg:hover{
+    background-color: #242424;
+}

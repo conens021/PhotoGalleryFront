@@ -4,7 +4,7 @@ import { useDropzone } from 'react-dropzone'
 
 import './file-upload.css'
 
-function FileUpload() {
+function FileUpload({toFormData}) {
 
     const style = {
         height: '150px',
@@ -15,22 +15,25 @@ function FileUpload() {
     }
 
     const [files, setFiles] = useState([])
-    const [previewFiles, setPreviewFiles] = useState([])
+    //const [previewFiles, setPreviewFiles] = useState([])
 
     useEffect(() => {
 
         files.forEach(f => {
+
             const reader = new FileReader()
 
             //when load end
             reader.onload = () => {
-                setPreviewFiles( prev => ([...prev,reader.result]))
+                //setPreviewFiles( prev => ([...prev,reader.result]))
+                toFormData(reader.result)
             }
 
             reader.readAsDataURL(f)
 
         })
     }, [files])
+
 
     const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
         setFiles(acceptedFiles)
@@ -44,11 +47,6 @@ function FileUpload() {
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
 
-    const renderFilePreview = () => {
-        return previewFiles.map(f => (
-            <img src={f} />
-        ))
-    }
 
     return (
         <React.Fragment>
@@ -57,14 +55,11 @@ function FileUpload() {
                 <input {...getInputProps()} />
                 {
                     isDragActive ?
-                        <p>Drop the files here ...</p> :
+                        <p>Just release and preview photos...</p> :
                         <p>Drag 'n' drop some files here, or click to select files</p>
                 }
             </Box>
-            <div className='file-preview'>
-                {renderFilePreview()}
-            </div>
-
+          
         </React.Fragment>
 
     )

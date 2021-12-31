@@ -1,11 +1,11 @@
 import { Box, CircularProgress, Container } from "@mui/material";
 import axios from "axios";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import AddGalleryModal from "../Header/GalleryList/AddGalleryModal";
 import PhotoList from "../Photos/PhotoList";
 import AddPhotoModal from "./AddPhotoModal";
+import CoverPhoto from "./CoverPhoto/CoverPhoto";
 
 function Gallery() {
 
@@ -24,13 +24,12 @@ function Gallery() {
         requestPhotos()
     }, [params])
 
+
     useEffect(() => {
-        requestPhotos()
-    }, [])
+        console.log(gallery)
+    }, [gallery])
 
     const requestPhotos = () => {
-
-        dispatch({ type: "SET_PHOTOS_LOADING", payload: true })
 
         const headers = {
             'Content-Type': 'application/json',
@@ -39,7 +38,6 @@ function Gallery() {
 
         axios.get(`http://localhost:5297/galleries/${params.id}`, { headers: headers })
             .then(r => {
-
                 dispatch({ type: "SET_GALLERY", payload: r.data.gallery })
 
                 dispatch({ type: "SET_PHOTOS", payload: r.data.photos })
@@ -55,7 +53,6 @@ function Gallery() {
     }
 
     const renderLoading = () => {
-        console.log("loading.....")
         return (
             <div className="backdrop">
                 <CircularProgress sx={{ color: 'secondary.light' }} />
@@ -64,18 +61,17 @@ function Gallery() {
     }
     return (
         <main>
-            <Box sx={{ backgroundColor: 'primary.main', width: '100%', height: '100%', paddingTop: '50px' }} >
+            <Box sx={{ backgroundColor: 'primary.main', width: '100%', height: '100%', position: 'relative' }} >
                 {isLoading && renderLoading()}
                 {
                     !isLoading &&
-                    <Container maxWidth="lg" style={{ 'textAlign': 'center' }}>
-                        <h2>{gallery.name}</h2>
-                        <PhotoList />
+                    <React.Fragment>
+                        <CoverPhoto galleryName={gallery.name} />
                         <AddPhotoModal />
-                    </Container>
+                        <PhotoList />
+                    </React.Fragment>
                 }
             </Box>
-
         </main >
     );
 }

@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import './gallery-list.css'
-import axios, { AxiosResponse, AxiosError } from 'axios';
+import axios from 'axios';
 import { Link as RouterLink } from 'react-router-dom'
-import Link from '@mui/material/Link'
 import { Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import AddGalleryModal from './AddGalleryModal';
 import { CircularProgress, Container } from "@mui/material";
 import { Box } from '@mui/system';
+import {toTitleCase} from '../.../../../../helpers/toTitleCase'
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 
 function GalleryList(props) {
@@ -26,6 +27,7 @@ function GalleryList(props) {
 
     //on page load fetch galleries
     useEffect(() => {
+        dispatch({ type: "SET_GALLERIES_LOADING", payload: true })
         fetchGalleriesFromServer()
     }, [])
 
@@ -83,9 +85,9 @@ function GalleryList(props) {
         if (galleries.length > 0)
             return galleries.map(g => (
 
-                <RouterLink to={`/galleries/${g.id}`}>
+                <RouterLink onClick={() => { dispatch({ type: "SET_PHOTOS_LOADING", payload: true }) }} to={`/galleries/${g.id}`}>
                     <Box>
-                        {g.name}
+                        {toTitleCase(g.name)}
                     </Box>
                 </RouterLink>
             ))
@@ -97,7 +99,7 @@ function GalleryList(props) {
     const renderLoading = () => {
         return (
             <div className="loading-galleries">
-                <CircularProgress sx={{color : 'secondary.light'}}/>
+                <CircularProgress sx={{ color: 'secondary.light' }} />
             </div>
         )
     }
@@ -109,10 +111,14 @@ function GalleryList(props) {
             {!isLoading &&
                 <li className='gallery-list'>
 
-                    <RouterLink to="/">
-                        <Box sx= {{backgroundColor : 'secondary.main'}}>
-                            Recently Added
+                    <RouterLink
+                        onClick={() => { dispatch({ type: "SET_PHOTOS_LOADING", payload: true }) }}
+                        to="/" >
+
+                        <Box sx={{ backgroundColor: 'secondary.dark' ,display : 'flex', 'justifyContent' : 'flex-start','column-gap' : '5px' }}>
+                            <AccessTimeIcon /> Recently Added
                         </Box>
+
                     </RouterLink>
 
                     {renderGalleries()}

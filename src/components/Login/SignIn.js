@@ -87,6 +87,8 @@ export default function SignIn() {
                 const data = response.data
                 localStorage.setItem('userSession', JSON.stringify(data.user));
                 localStorage.setItem('jwt', data.jwt);
+                dispatch({ type: "SET_PHOTOS_LOADING" ,payload : true})
+                dispatch({ type: "SET_GALLERIES_LOADING" ,payload : true})
                 dispatch({ type: "LOGIN_USER" })
                 navigate("/")
 

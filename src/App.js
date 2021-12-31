@@ -8,7 +8,7 @@ import Home from './components/Home/Home';
 import SignUp from './components/SignUp/SignUp';
 import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
 import PhotoList from './components/Photos/PhotoList';
-import { createTheme ,ThemeProvider} from '@mui/material/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 
 function App() {
@@ -27,8 +27,8 @@ function App() {
         contrastText: '#000',
       },
       background: {
-        default: "#334960",
-        text : "#fff"
+        default: "#202020",
+        text: "#fff"
       },
     },
   });
@@ -44,8 +44,10 @@ function App() {
 
   useEffect(() => {
     if (userSession == null && !userLogedIn) {
+      console.log("NIJE ULOGOVAN")
       navigate("/login")
     }
+    console.log("Ulogovan je")
     dispatch({ type: "LOGIN_USER" })
   }, [])
 

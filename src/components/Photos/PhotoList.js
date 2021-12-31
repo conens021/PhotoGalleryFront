@@ -1,50 +1,74 @@
 import ImageList from '@mui/material/ImageList'
 import ImageListItem from '@mui/material/ImageListItem'
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import React from 'react'
 
+import LazyLoad from 'react-lazyload'
+
 import './photo-list.css'
-import AddGalleryModal from '../Header/GalleryList/AddGalleryModal'
+import PhotoDisplayModal from './PhotoDisplayModal/PhotoDisplayModal'
 
 function PhotoList() {
 
     const photos = useSelector(state => state.photos)
 
-    useEffect(() => {
-        console.log(photos)
-    }, [])
+    const [modalVisible, setModalVisible] = useState(false)
+
+    const dispatch = useDispatch()
+
+
+
 
     useEffect(() => {
-        console.log(photos)
+        renderPhotos()
     }, [photos])
+
+    const showPhotoModal = (photo) => {
+        dispatch({ type: "SET_PHOTO_MODAL", payload: photo })
+        setModalVisible(true)
+    }
+
+    const closeModal = () => {
+        setModalVisible(false)
+    }
 
     const renderPhotos = () => {
         if (photos != null) {
             return photos.map((photo) => (
-                <ImageListItem key={photo.id}>
-                    <img
+                <LazyLoad height={200} key={photo.id}>
+                    <img class='lazy'
                         src={`http://localhost:5297/images/${photo.path}`}
                         alt={photo.path}
                         loading="lazy"
+                        onClick={() => showPhotoModal(photo)}
                     />
-                </ImageListItem>
+                </LazyLoad>
             ))
         }
 
     }
 
+
+
     return (
-        <div className='image-list-container'>
-            <ImageList
-                sx={{ width: '100%', height: 550 }}
-                variant="quilted"
-                cols={6}
-                rowHeight={137}
-            >
-                {renderPhotos()}
-            </ImageList>
-        </div>
+        <React.Fragment>
+
+            {
+                modalVisible
+                &&
+                <PhotoDisplayModal closeModal={closeModal} vissible={modalVisible} />
+            }
+
+            {
+                !modalVisible
+                &&
+                <div className='image-list-container' onScroll={() => { console.log("SCROLLED") }}>
+                    {renderPhotos()}
+                </div>
+            }
+
+        </React.Fragment>
 
 
     )

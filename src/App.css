@@ -19,6 +19,7 @@ main{
   position: relative;
 }
 
+
 main h2{
   margin-bottom: 60px;
   text-align: left;
@@ -30,4 +31,10 @@ main h2{
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.vawe{
+  position: absolute;
+  z-index: 0;
+  bottom: -100px;
 }
