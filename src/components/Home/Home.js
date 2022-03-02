@@ -48,7 +48,7 @@ function Home() {
 
     return (
         <main>
-            <Box sx={{ backgroundColor: 'primary.main' ,width : '100%',height:'100%',paddingTop : '50px'}} >
+            <Box sx={{ backgroundColor: 'primary.main', width: '100%', height: '100%', paddingTop: '50px' }} >
 
                 {isLoading && renderLoading()}
                 {

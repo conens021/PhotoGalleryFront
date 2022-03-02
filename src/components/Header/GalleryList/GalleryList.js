@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import './gallery-list.css'
 import axios from 'axios';
-import { Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink, useParams } from 'react-router-dom'
 import { Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import AddGalleryModal from './AddGalleryModal';
 import { CircularProgress, Container } from "@mui/material";
 import { Box } from '@mui/system';
-import {toTitleCase} from '../.../../../../helpers/toTitleCase'
+import { toTitleCase } from '../.../../../../helpers/toTitleCase'
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 
@@ -16,6 +16,7 @@ function GalleryList(props) {
 
     const galleries = useSelector(state => state.galleries)
     const isLoading = useSelector(state => state.galleriesLoading)
+    const galleryId = useSelector(state => state.galleryId)
 
     const user = JSON.parse(localStorage.getItem("userSession"))
     const jwt = localStorage.getItem("jwt")
@@ -29,8 +30,13 @@ function GalleryList(props) {
     useEffect(() => {
         dispatch({ type: "SET_GALLERIES_LOADING", payload: true })
         fetchGalleriesFromServer()
+
     }, [])
 
+
+    useEffect(() => { 
+        console.log(`Gallery id ${galleryId}`)
+    }, [galleryId])
 
     //Logout user end navigate to the login page
     const logoutHandler = () => {
@@ -39,6 +45,7 @@ function GalleryList(props) {
         localStorage.removeItem('jwt');
 
         dispatch({ type: "LOGOUT_USER" })
+        dispatch({ type: "SET_GALLERY_ID", payload: 0 })
 
         navigate("/login")
     }
@@ -73,27 +80,42 @@ function GalleryList(props) {
 
     const handleError = (err) => {
         if (err.response) {
-            console.log("Problem with Response", err.response.status)
         } else if (err.request) {
-            //if we have probmel with request jwt token is expired
-            //so we logout user
             logoutHandler()
         }
     }
 
+    const changeGallery = (id) => {
+
+        dispatch({ type: "SET_PHOTOS_LOADING", payload: true })
+        dispatch({ type: "SET_GALLERY_ID", payload: id })
+    }
+
     const renderGalleries = () => {
+
+        console.log(galleryId)
         if (galleries.length > 0)
             return galleries.map(g => (
 
-                <RouterLink onClick={() => { dispatch({ type: "SET_PHOTOS_LOADING", payload: true }) }} to={`/galleries/${g.id}`}>
-                    <Box>
+                <RouterLink onClick={() => changeGallery(g.id)} to={`/galleries/${g.id}`}>
+                    <Box sx={galleryId == g.id && { backgroundColor: 'secondary.dark' }}>
                         {toTitleCase(g.name)}
                     </Box>
                 </RouterLink>
             ))
-        galleries.forEach(element => {
-            console.log(element)
-        });
+    }
+
+    const renderGalleryList = () => {
+        return (
+            <li className='gallery-list'>
+                <RouterLink onClick={() => galleryId != 0 && changeGallery(0)} to="/" >
+                    <Box sx={galleryId == 0 && { backgroundColor: 'secondary.dark' }} >
+                        <AccessTimeIcon /> Recently Added
+                    </Box>
+                </RouterLink>
+                {renderGalleries()}
+            </li >
+        )
     }
 
     const renderLoading = () => {
@@ -108,22 +130,7 @@ function GalleryList(props) {
         <ul>
             {isLoading && renderLoading()}
 
-            {!isLoading &&
-                <li className='gallery-list'>
-
-                    <RouterLink
-                        onClick={() => { dispatch({ type: "SET_PHOTOS_LOADING", payload: true }) }}
-                        to="/" >
-
-                        <Box sx={{ backgroundColor: 'secondary.dark' ,display : 'flex', 'justifyContent' : 'flex-start','column-gap' : '5px' }}>
-                            <AccessTimeIcon /> Recently Added
-                        </Box>
-
-                    </RouterLink>
-
-                    {renderGalleries()}
-                </li>
-            }
+            {!isLoading && renderGalleryList()}
 
             <li className='create-gallery'>
                 <AddGalleryModal />

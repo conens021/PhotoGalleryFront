@@ -26,11 +26,6 @@ function AddPhotoModal() {
 
     const jwt = localStorage.getItem("jwt")
 
-    useEffect(() => {
-        console.log(files)
-    }, [files])
-
-
     const style = {
         position: 'absolute',
         top: '50%',

@@ -25,7 +25,6 @@ function FileUpload({toFormData}) {
 
             //when load end
             reader.onload = () => {
-                //setPreviewFiles( prev => ([...prev,reader.result]))
                 toFormData(reader.result)
             }
 

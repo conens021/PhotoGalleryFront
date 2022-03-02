@@ -7,6 +7,7 @@ const initialState = {
     galleriesLoading: false,
     photosIsLoading: false,
     gallery: {},
+    galleryId : 0,
     photoModal: {}
 }
 
@@ -40,7 +41,11 @@ const rootReducer = (state = initialState, action) => {
             return {
                 ...state, gallery: action.payload
             }
-
+        case "SET_GALLERY_ID":
+            
+            return {
+                ...state,galleryId : action.payload
+            }
         case "ADD_NEW_GALLERY":
 
             const newGallery = action.payload

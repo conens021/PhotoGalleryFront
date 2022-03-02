@@ -17,3 +17,7 @@ code {
 body{
   position: relative;
 }
+
+h1,h2,h3{
+  text-transform: capitalize;
+}
